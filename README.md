@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rubaiyat Ruhin · Portfolio
 
-## Getting Started
+The personal site of Rubaiyat (Ru) Ruhin, a data analyst in Adelaide: case studies in SQL, Python and Power BI, plus a little life outside work.
 
-First, run the development server:
+**Live:** _domain coming in stage 6_
+
+## Stack
+
+| Layer         | Choice                                                                      |
+| ------------- | --------------------------------------------------------------------------- |
+| Framework     | Next.js 16 (App Router) + TypeScript                                        |
+| Styling       | Tailwind CSS 4, with the design's colours as CSS variables                  |
+| Light / dark  | next-themes (follows the device first, then remembers the visitor's choice) |
+| Motion        | GSAP + ScrollTrigger, Lenis smooth scrolling (from stage 2)                 |
+| Content       | MDX case studies and TypeScript data files in `content/`                    |
+| Fonts         | Instrument Serif, Geist, Geist Mono, all self-hosted                        |
+| Hosting       | Vercel, deployed from `main`; every pull request gets a preview link        |
+| Visitor stats | Umami, routed through the site's own domain (stage 6)                       |
+| Tests         | Playwright on desktop Chrome and iPhone Safari, in GitHub Actions           |
+
+## Run it locally
+
+Needs Node.js 20.9 or newer.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # fill in keys when the live-data stage arrives
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Checks
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint          # ESLint
+npm run typecheck     # TypeScript
+npm run format:check  # Prettier (npm run format to fix)
+npm run build         # production build
+npm run test:e2e      # Playwright, against the production build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+GitHub Actions runs all of these on every pull request, and `main` only accepts a merge when they pass.
 
-## Learn More
+## Project layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/          pages, layout, fonts, global styles, API routes
+components/   UI pieces, grouped by section (home, case, overlays, nav, ui)
+content/      everything you edit as content: site details, projects, jobs, photos
+lib/          shared helpers (live data, motion, analytics)
+public/       images and the resume PDF, served as-is
+tests/        Playwright end-to-end tests
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Adding content
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **A project:** copy a file in `content/projects/`, fill in the data block at the top, add images to `public/images/projects/<slug>/`.
+- **A job:** add an entry to `content/experience.ts`.
+- **A photo:** strip its location data, add it to `public/images/life/`, then add a line to `content/photos.ts`.
+- **A new resume:** replace `public/resume/Rubaiyat-Ruhin-Resume.pdf`, keeping the name.
 
-## Deploy on Vercel
+## Working on it
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `main` is always the live site. Work happens on a branch (`feat/…`, `fix/…`) and merges through a pull request after the preview is checked.
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `feat: add resume viewer`, `fix: mobile nav overflow`.
+- Secrets live in `.env.local` and Vercel's environment variables, never in the code.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Security
+
+Strict browser security headers are set in `next.config.ts`. Dependabot opens weekly update pull requests. The site has no login, database or forms.
+
+© Rubaiyat Ruhin. The code is shared for reference; the writing, photos and resume are not licensed for reuse.

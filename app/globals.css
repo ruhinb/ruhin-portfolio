@@ -1,26 +1,122 @@
 @import "tailwindcss";
 
+/* Dark mode follows the `dark` class that next-themes puts on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Colour tokens, taken from the final design.
+ * Light is the default; `.dark` swaps every token at once,
+ * so components use one class name in both themes.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --accent: #f5b83d;
+  --ac-tx: #8a5a00;
+
+  --bg: #f1ede5;
+  --sheet: #faf8f4;
+  --sf: #ffffff;
+  --sf2: #ece8e0;
+  --bd: #e3ded4;
+  --bd2: #cfc9be;
+  --tx: #16181b;
+  --tx2: #34383e;
+  --mu: #5e636b;
+  --fa: #6a6f77;
+  --inv: #16181b;
+  --inv-tx: #f6f4ef;
+  --nav-bg: rgba(250, 248, 244, 0.74);
+  --line: #b3ac9f;
+  --glow-a: rgba(245, 184, 61, 0.34);
+  --glow-b: rgba(120, 150, 255, 0.18);
+  --grid: rgba(22, 24, 27, 0.13);
+  --grain: 0.07;
+  --grain-blend: multiply;
+  --sheet-shadow: 0.08;
+  --card-shadow: 0.07;
+
+  color-scheme: light;
 }
 
+.dark {
+  --ac-tx: var(--accent);
+
+  --bg: #0b0c0e;
+  --sheet: #111316;
+  --sf: #16191d;
+  --sf2: #1c1f24;
+  --bd: #262a30;
+  --bd2: #353a41;
+  --tx: #ededea;
+  --tx2: #cfcfcb;
+  --mu: #9c9fa4;
+  --fa: #8c9096;
+  --inv: #ededea;
+  --inv-tx: #0d0e10;
+  --nav-bg: rgba(22, 25, 29, 0.72);
+  --line: #5a5e64;
+  --glow-a: rgba(245, 184, 61, 0.16);
+  --glow-b: rgba(90, 130, 255, 0.14);
+  --grid: rgba(255, 255, 255, 0.09);
+  --grain: 0.09;
+  --grain-blend: screen;
+  --sheet-shadow: 0.5;
+  --card-shadow: 0.45;
+
+  color-scheme: dark;
+}
+
+/* Expose the tokens to Tailwind: bg-bg, text-tx, border-bd, text-accent, font-serif… */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-ac-tx: var(--ac-tx);
+  --color-bg: var(--bg);
+  --color-sheet: var(--sheet);
+  --color-sf: var(--sf);
+  --color-sf2: var(--sf2);
+  --color-bd: var(--bd);
+  --color-bd2: var(--bd2);
+  --color-tx: var(--tx);
+  --color-tx2: var(--tx2);
+  --color-mu: var(--mu);
+  --color-fa: var(--fa);
+  --color-inv: var(--inv);
+  --color-inv-tx: var(--inv-tx);
+  --color-line: var(--line);
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: #16181b;
+}
+
+/* Visitors who ask their device for less motion get none of the site's animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

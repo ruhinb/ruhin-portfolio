@@ -17,6 +17,9 @@ jobs:
     name: Lint, type check, build, test
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      # The live cards use stand-in data in CI instead of calling Spotify, football-data and Jolpica.
+      LIVE_DATA_FIXTURES: "1"
     steps:
       - uses: actions/checkout@v7
 

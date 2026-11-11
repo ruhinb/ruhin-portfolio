@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { site } from "@/content/site";
 import { ResumeButton } from "@/components/ui/resume-button";
+import { HeroSong } from "./now-playing";
 
 // Delays line up with the loader; `--off` moves everything earlier on repeat visits.
 const delay = (s: number): CSSProperties => ({ animationDelay: `calc(${s}s + var(--off))` });
@@ -109,6 +110,8 @@ export function Hero() {
           <ResumeButton className="tc decoration-bd2 hover:decoration-accent inline-flex h-[50px] cursor-pointer items-center border-0 bg-transparent p-0 text-[15px] font-medium text-inherit underline underline-offset-[6px]" />
         </div>
       </div>
+
+      <HeroSong />
 
       <div
         aria-hidden="true"

@@ -13,6 +13,9 @@ import { ResumeViewer } from "@/components/overlays/resume-viewer";
 import { PageBehaviour } from "@/components/page-behaviour";
 import { Grain } from "@/components/ui/grain";
 
+// Rebuilt at most every 15 minutes so the football and F1 cards stay current.
+export const revalidate = 900;
+
 export default function Home() {
   return (
     <>

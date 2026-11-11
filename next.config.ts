@@ -8,8 +8,8 @@ const onVercel = process.env.VERCEL === "1";
 /*
  * Content Security Policy: what the browser may load and run on this site.
  *
- * Scripts, styles, fonts and requests are limited to this site's own domain
- * (Umami analytics will also run through it). Images may also come from
+ * Scripts, styles, fonts and requests are limited to this site's own domain.
+ * Umami's script and its stats requests go through this domain too (see rewrites below). Images may also come from
  * Spotify's album-art server. Nothing may embed the site in a frame.
  *
  * Inline scripts are allowed because Next.js writes small ones into every page.
@@ -53,6 +53,14 @@ const nextConfig: NextConfig = {
     // 75 is Next's default; 90 keeps photos and the small text on report pages sharp.
     qualities: [75, 90],
     remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }],
+  },
+  // Umami Cloud, served from this site's own address: the browser only ever talks to
+  // rubaiyat.dev, so the strict Content Security Policy above stays as it is.
+  async rewrites() {
+    return [
+      { source: "/u/s.js", destination: "https://cloud.umami.is/script.js" },
+      { source: "/u/api/send", destination: "https://gateway.umami.is/api/send" },
+    ];
   },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];

@@ -153,6 +153,7 @@ export function Gallery() {
           <a
             href={instagram.url}
             target="_blank"
+            data-umami-event="Open Instagram"
             rel="noopener noreferrer"
             className="inline-flex h-[42px] items-center rounded-full border border-white/20 px-4 text-[13.5px] no-underline"
           >

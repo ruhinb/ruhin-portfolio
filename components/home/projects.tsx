@@ -10,6 +10,7 @@ import {
   type CaseStudy,
   type ProjectCategory,
 } from "@/content/projects";
+import { track } from "@/lib/analytics";
 import { SectionLabel } from "./section-label";
 
 // Case studies count as "Analytics"; smaller projects carry their own categories.
@@ -228,6 +229,7 @@ function FeaturedCard({ p, index, total }: { p: CaseStudy; index: number; total:
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
             href={`/projects/${p.slug}`}
+            onClick={() => track("Open case study", { project: p.slug })}
             data-mag
             className="tc bg-inv text-inv-tx inline-flex h-[46px] items-center gap-2.5 rounded-full px-5 text-sm font-medium no-underline"
           >
@@ -250,6 +252,8 @@ function FeaturedCard({ p, index, total }: { p: CaseStudy; index: number; total:
           <a
             href={p.github}
             target="_blank"
+            data-umami-event="Open project on GitHub"
+            data-umami-event-project={p.slug}
             rel="noopener noreferrer"
             data-mag
             className="tc border-bd2 inline-flex h-[46px] items-center rounded-full border px-[18px] text-sm font-medium no-underline"
@@ -334,6 +338,8 @@ export function Projects() {
                 <a
                   href={p.href}
                   target="_blank"
+                  data-umami-event="Open project on GitHub"
+                  data-umami-event-project={p.title}
                   rel="noopener noreferrer"
                   onMouseEnter={() => setHov(i)}
                   onFocus={() => setHov(i)}

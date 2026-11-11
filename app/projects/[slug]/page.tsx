@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CaseNav } from "@/components/case/case-nav";
+import { ReadToEnd } from "@/components/analytics/read-to-end";
 import { Curtain } from "@/components/case/curtain";
 import { Decision } from "@/components/case/decision";
 import { ScrollFallback } from "@/components/motion/scroll-fallback";
@@ -27,7 +28,15 @@ export async function generateMetadata({
   return {
     title: `${p.t1} ${p.t2}`,
     description: p.lead,
-    openGraph: { title: `${p.t1} ${p.t2} · ${site.name}`, description: p.lead, type: "article" },
+    alternates: { canonical: `/projects/${p.slug}` },
+    openGraph: {
+      type: "article",
+      locale: "en_AU",
+      siteName: site.name,
+      url: `/projects/${p.slug}`,
+      title: `${p.t1} ${p.t2} · ${site.name}`,
+      description: p.lead,
+    },
   };
 }
 
@@ -57,7 +66,9 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
   const year = await buildYear();
 
   return (
-    <div className="case bg-bg text-tx relative min-h-dvh">
+    // overflow-x-clip: report images zoom in slightly (scale 1.06) as they arrive, which would
+    // otherwise poke past the screen edge on tablet and laptop widths and allow sideways scrolling.
+    <div className="case bg-bg text-tx relative min-h-dvh overflow-x-clip">
       <Curtain slug={p.slug} t1={p.t1} t2={p.t2} />
 
       <div
@@ -89,6 +100,8 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
               <a
                 href={p.github}
                 target="_blank"
+                data-umami-event="Open project on GitHub"
+                data-umami-event-project={p.slug}
                 rel="noopener noreferrer"
                 data-mag
                 className="tc border-bd2 inline-flex h-[46px] items-center rounded-full border px-[18px] text-sm font-medium no-underline"
@@ -254,6 +267,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
             </dl>
           </div>
         </section>
+        <ReadToEnd project={p.slug} />
       </main>
 
       <section aria-label="Next project" className="px-6 pb-12">
@@ -290,7 +304,14 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
               © {year} {site.name}
               {p.footNote ? ` · ${p.footNote}` : ""}
             </span>
-            <a href={p.github} target="_blank" rel="noopener noreferrer" className="no-underline">
+            <a
+              href={p.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-umami-event="Open project on GitHub"
+              data-umami-event-project={p.slug}
+              className="no-underline"
+            >
               {p.githubLabel}
             </a>
           </footer>

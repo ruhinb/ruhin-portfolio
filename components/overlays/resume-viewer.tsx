@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
+import { track } from "@/lib/analytics";
 import { onOpenResume } from "@/lib/resume";
 import { lockScroll } from "@/lib/scroll";
 
@@ -81,6 +82,7 @@ export function ResumeViewer() {
           <a
             href={site.resume.pdf}
             download="Rubaiyat-Ruhin-Resume.pdf"
+            onClick={() => track("Download resume")}
             className="inline-flex h-[42px] items-center gap-2 rounded-full border border-white/20 px-4 text-[13.5px] no-underline"
           >
             Download PDF

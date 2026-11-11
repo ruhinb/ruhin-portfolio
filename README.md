@@ -2,7 +2,7 @@
 
 The personal site of Rubaiyat (Ru) Ruhin, a data analyst in Adelaide: case studies in SQL, Python and Power BI, plus a little life outside work.
 
-**Live:** _domain coming in stage 6_
+**Live:** [rubaiyat.dev](https://rubaiyat.dev)
 
 ## Stack
 
@@ -15,12 +15,12 @@ The personal site of Rubaiyat (Ru) Ruhin, a data analyst in Adelaide: case studi
 | Content       | TypeScript data files in `content/` (projects, experience, about, site)     |
 | Fonts         | Instrument Serif, Geist, Geist Mono, all self-hosted                        |
 | Hosting       | Vercel, deployed from `main`; every pull request gets a preview link        |
-| Visitor stats | Umami, routed through the site's own domain (stage 6)                       |
+| Visitor stats | Umami Cloud, routed through the site's own domain (no cookies)              |
 | Tests         | Playwright on desktop Chrome and iPhone Safari, in GitHub Actions           |
 
 ## Run it locally
 
-Needs Node.js 20.9 or newer.
+Needs Node.js 22.
 
 ```bash
 npm install

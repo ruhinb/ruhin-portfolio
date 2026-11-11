@@ -44,6 +44,7 @@ export function PhotoPreview() {
           <a
             href={instagram.url}
             target="_blank"
+            data-umami-event="Open Instagram"
             rel="noopener noreferrer"
             data-mag
             className="tc border-bd2 inline-flex h-11 items-center rounded-full border px-4 text-sm font-medium no-underline"

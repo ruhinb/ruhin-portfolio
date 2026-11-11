@@ -187,6 +187,7 @@ export function Gallery() {
                     style={{ animationDelay: `${i * 40}ms`, aspectRatio: `${p.w} / ${p.h}` }}
                   >
                     <Image
+                      quality={90}
                       src={photoSrc(p)}
                       alt={p.caption}
                       fill
@@ -217,6 +218,7 @@ export function Gallery() {
             style={{ aspectRatio: `${cur.w} / ${cur.h}` }}
           >
             <Image
+              quality={90}
               src={photoSrc(cur)}
               alt={cur.caption}
               fill

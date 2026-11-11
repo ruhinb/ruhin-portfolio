@@ -50,6 +50,8 @@ const nextConfig: NextConfig = {
   images: {
     // WebP only: AVIF is a little smaller but many times slower to create on the first request.
     formats: ["image/webp"],
+    // 75 is Next's default; 90 keeps photos and the small text on report pages sharp.
+    qualities: [75, 90],
     remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }],
   },
   async headers() {

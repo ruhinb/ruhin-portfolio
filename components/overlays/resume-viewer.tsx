@@ -128,6 +128,7 @@ export function ResumeViewer() {
         data-lenis-prevent
       >
         <Image
+          quality={90}
           src={site.resume.image}
           alt="Resume of Rubaiyat (Ru) Ruhin, Data Analyst in Adelaide: summary, skills, experience, projects and education"
           width={1654}

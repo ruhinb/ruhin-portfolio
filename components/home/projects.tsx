@@ -127,6 +127,7 @@ function FeaturedCard({ p, index, total }: { p: CaseStudy; index: number; total:
                   }}
                 >
                   <Image
+                    quality={90}
                     src={pg.img.src}
                     alt=""
                     width={pg.img.w}

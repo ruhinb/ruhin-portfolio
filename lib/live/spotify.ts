@@ -44,7 +44,16 @@ const fromTrack = (t: Track, status: "playing" | "recent", progressMs = 0): NowP
   };
 };
 
-/** Pure, so it can be tested: the currently-playing body (null for "204 nothing playing") and recently-played body. */
+/**
+ * Pure, so it can be tested: the currently-playing body (null for "204 nothing playing")
+ * and the recently-played body.
+ *
+ * Which song counts as "last played", most reliable first:
+ * 1. The track Spotify still has loaded (paused or stopped). Spotify keeps it for a while
+ *    after you stop, and it's always the real last song.
+ * 2. Otherwise the listening history, newest first by its played_at time. The history is
+ *    known to lag or skip songs, so it's only the fallback.
+ */
 export function parseNowPlaying(
   current: {
     is_playing: boolean;
@@ -52,17 +61,18 @@ export function parseNowPlaying(
     item: Track | null;
     currently_playing_type?: string;
   } | null,
-  recent: { items: { track: Track }[] } | null,
+  recent: { items: { track: Track; played_at?: string }[] } | null,
 ): NowPlaying {
-  if (
-    current?.is_playing &&
-    current.item &&
-    (current.currently_playing_type ?? "track") === "track"
-  ) {
-    return fromTrack(current.item, "playing", current.progress_ms ?? 0);
+  const isTrack = (current?.currently_playing_type ?? "track") === "track";
+  if (current?.item && isTrack) {
+    return current.is_playing
+      ? fromTrack(current.item, "playing", current.progress_ms ?? 0)
+      : fromTrack(current.item, "recent");
   }
-  const last = recent?.items?.[0]?.track;
-  return last ? fromTrack(last, "recent") : { status: "off" };
+  const newest = [...(recent?.items ?? [])].sort(
+    (a, b) => Date.parse(b.played_at ?? "") - Date.parse(a.played_at ?? ""),
+  )[0]?.track;
+  return newest ? fromTrack(newest, "recent") : { status: "off" };
 }
 
 async function accessToken() {
@@ -96,8 +106,9 @@ export async function getNowPlaying(): Promise<NowPlaying> {
     };
     const cur = await fetch(`${API}/currently-playing`, opts);
     const current = cur.status === 200 ? await cur.json() : null;
-    if (current?.is_playing) return parseNowPlaying(current, null);
-    const rec = await fetch(`${API}/recently-played?limit=1`, opts);
+    if (current?.item && (current.currently_playing_type ?? "track") === "track")
+      return parseNowPlaying(current, null);
+    const rec = await fetch(`${API}/recently-played?limit=20`, opts);
     return parseNowPlaying(current, rec.ok ? await rec.json() : null);
   } catch (err) {
     console.error("[spotify]", err);

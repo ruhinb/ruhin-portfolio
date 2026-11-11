@@ -30,7 +30,8 @@ export type F1Data = {
 };
 
 export type NowPlaying =
-  | { status: "off" }
+  // reason: a short note on why there's no song (e.g. "token 400"), never a secret.
+  | { status: "off"; reason?: string }
   | {
       status: "playing" | "recent";
       title: string;

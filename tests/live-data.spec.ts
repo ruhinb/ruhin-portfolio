@@ -270,6 +270,15 @@ test("spotify: playing, last played, and nothing at all", () => {
       { is_playing: true, progress_ms: 0, item: track, currently_playing_type: "episode" },
       { items: [] },
     ),
-  ).toEqual({ status: "off" });
-  expect(parseNowPlaying(null, null)).toEqual({ status: "off" });
+  ).toMatchObject({ status: "off" });
+  expect(parseNowPlaying(null, null)).toMatchObject({ status: "off" });
+  // Entries without a song (unavailable tracks) are skipped, not a crash.
+  expect(
+    parseNowPlaying(null, {
+      items: [
+        { track: null as never, played_at: "2026-11-12T10:00:00Z" },
+        { track: { name: "Local file" }, played_at: "2026-11-11T10:00:00Z" },
+      ],
+    }),
+  ).toMatchObject({ status: "recent", title: "Local file", art: null });
 });

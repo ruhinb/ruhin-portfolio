@@ -6,12 +6,13 @@ const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const API = "https://api.spotify.com/v1/me/player";
 export const SPOTIFY_SCOPES = "user-read-currently-playing user-read-recently-played";
 
+// Spotify leaves fields out for local files and unavailable songs, so all but the name are optional.
 type Track = {
   name: string;
-  duration_ms: number;
-  external_urls: { spotify: string };
-  artists: { name: string }[];
-  album: { images: { url: string; width: number }[] };
+  duration_ms?: number;
+  external_urls?: { spotify?: string };
+  artists?: { name: string }[];
+  album?: { images?: { url: string; width: number | null }[] };
 };
 
 /** Why the one-time setup pages are switched off, or null if they're open. Says which setting is missing, never its value. */
@@ -31,16 +32,17 @@ export const basicAuth = (id: string, secret: string) =>
 
 const fromTrack = (t: Track, status: "playing" | "recent", progressMs = 0): NowPlaying => {
   // The smallest cover that's still sharp at 58px on a retina screen.
-  const images = [...t.album.images].sort((a, b) => a.width - b.width);
-  const art = images.find((i) => i.width >= 120)?.url ?? images[images.length - 1]?.url ?? null;
+  const images = [...(t.album?.images ?? [])].sort((a, b) => (a.width ?? 0) - (b.width ?? 0));
+  const art =
+    images.find((i) => (i.width ?? 0) >= 120)?.url ?? images[images.length - 1]?.url ?? null;
   return {
     status,
     title: t.name,
-    artist: t.artists.map((a) => a.name).join(", "),
-    url: t.external_urls.spotify,
+    artist: (t.artists ?? []).map((a) => a.name).join(", "),
+    url: t.external_urls?.spotify ?? "https://open.spotify.com",
     art,
     progressMs,
-    durationMs: t.duration_ms,
+    durationMs: t.duration_ms ?? 0,
   };
 };
 
@@ -69,10 +71,11 @@ export function parseNowPlaying(
       ? fromTrack(current.item, "playing", current.progress_ms ?? 0)
       : fromTrack(current.item, "recent");
   }
-  const newest = [...(recent?.items ?? [])].sort(
-    (a, b) => Date.parse(b.played_at ?? "") - Date.parse(a.played_at ?? ""),
-  )[0]?.track;
-  return newest ? fromTrack(newest, "recent") : { status: "off" };
+  const time = (at?: string) => Date.parse(at ?? "") || 0;
+  const newest = (recent?.items ?? [])
+    .filter((i) => i?.track?.name)
+    .sort((a, b) => time(b.played_at) - time(a.played_at))[0]?.track;
+  return newest ? fromTrack(newest, "recent") : { status: "off", reason: "no history" };
 }
 
 async function accessToken() {
@@ -98,20 +101,26 @@ export async function getNowPlaying(): Promise<NowPlaying> {
   if (process.env.LIVE_DATA_FIXTURES === "1") return (await import("./fixtures")).nowPlaying;
   try {
     const token = await accessToken();
-    if (!token) return { status: "off" };
+    if (!token) return { status: "off", reason: "not set up" };
     const opts = {
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store" as const,
       signal: AbortSignal.timeout(6000),
     };
     const cur = await fetch(`${API}/currently-playing`, opts);
+    if (cur.status !== 200 && cur.status !== 204) console.error("[spotify] now:", cur.status);
     const current = cur.status === 200 ? await cur.json() : null;
     if (current?.item && (current.currently_playing_type ?? "track") === "track")
       return parseNowPlaying(current, null);
     const rec = await fetch(`${API}/recently-played?limit=20`, opts);
-    return parseNowPlaying(current, rec.ok ? await rec.json() : null);
+    if (!rec.ok) {
+      console.error("[spotify] history:", rec.status);
+      return { status: "off", reason: `history ${rec.status}` };
+    }
+    return parseNowPlaying(current, await rec.json());
   } catch (err) {
     console.error("[spotify]", err);
-    return { status: "off" };
+    const msg = err instanceof Error ? err.message : "";
+    return { status: "off", reason: msg.startsWith("spotify token") ? msg : "error" };
   }
 }

@@ -13,7 +13,17 @@ async function load() {
   try {
     const res = await fetch("/api/now-playing");
     if (res.ok) {
-      data = (await res.json()) as NowPlaying;
+      const next = (await res.json()) as NowPlaying;
+      // A hiccup (status "off" with a reason) keeps the song already on screen.
+      if (
+        next.status === "off" &&
+        "reason" in next &&
+        next.reason &&
+        data?.status !== "off" &&
+        data
+      )
+        return;
+      data = next;
       listeners.forEach((l) => l());
     }
   } catch {

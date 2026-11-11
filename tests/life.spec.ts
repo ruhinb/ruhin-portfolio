@@ -120,7 +120,7 @@ test.describe("live data (test fixtures)", () => {
   test("the now-playing route answers and is cached briefly", async ({ request }) => {
     const res = await request.get("/api/now-playing");
     expect(res.status()).toBe(200);
-    expect(res.headers()["cache-control"]).toContain("s-maxage=20");
+    expect(res.headers()["cache-control"]).toContain("s-maxage=30");
     expect((await res.json()).status).toBe("playing");
   });
 

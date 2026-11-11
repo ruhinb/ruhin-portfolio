@@ -125,7 +125,9 @@ test.describe("live data (test fixtures)", () => {
   });
 
   test("the Spotify setup pages are closed without the app's keys", async ({ request }) => {
-    expect((await request.get("/api/spotify/login", { maxRedirects: 0 })).status()).toBe(404);
+    const login = await request.get("/api/spotify/login", { maxRedirects: 0 });
+    expect(login.status()).toBe(404);
+    expect(await login.text()).toContain("SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET aren't set");
     expect((await request.get("/api/spotify/callback?code=x&state=y")).status()).toBe(404);
   });
 

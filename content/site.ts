@@ -19,8 +19,8 @@ export const site = {
   resume: {
     pdf: "/resume/Rubaiyat-Ruhin-Resume.pdf",
     image: "/resume/Rubaiyat-Ruhin-Resume.webp",
-    // The web copy without a phone number. False until that file is in public/resume/.
-    ready: false,
+    // The web copy, without a phone number.
+    ready: true,
   },
 } as const;
 

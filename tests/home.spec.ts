@@ -160,3 +160,52 @@ test.describe("scroll motion fallback", () => {
     expect(errors).toEqual([]);
   });
 });
+
+test.describe("resume viewer", () => {
+  test.beforeEach(async ({ page }) => skipIntro(page));
+
+  test("opens from the hero, traps focus and closes with Escape", async ({ page }) => {
+    await page.goto("/");
+    const open = page.locator("#top").getByRole("button", { name: "Resume" });
+    await open.click();
+    const dialog = page.getByRole("dialog", { name: "Resume" });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "Close resume" })).toBeFocused();
+    await expect(dialog.getByRole("img", { name: /Resume of Rubaiyat/ })).toBeVisible();
+    await expect(dialog.getByRole("link", { name: /Download PDF/ })).toHaveAttribute(
+      "href",
+      "/resume/Rubaiyat-Ruhin-Resume.pdf",
+    );
+    // The page behind can't scroll while it's open.
+    expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("hidden");
+
+    // Tab cycles between the two controls and never leaves the dialog.
+    for (let i = 0; i < 3; i++) {
+      await page.keyboard.press("Tab");
+      expect(await dialog.evaluate((d) => d.contains(document.activeElement))).toBe(true);
+    }
+
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(open).toBeFocused();
+    expect(await page.evaluate(() => document.documentElement.style.overflow)).toBe("");
+  });
+
+  test("opens from the contact section and closes with the button", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await page.locator("#contact").getByRole("button", { name: "Resume" }).click();
+    const dialog = page.getByRole("dialog", { name: "Resume" });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: "Close resume" }).click();
+    await expect(dialog).toBeHidden();
+  });
+
+  test("the PDF and its preview image are served", async ({ request }) => {
+    const pdf = await request.get("/resume/Rubaiyat-Ruhin-Resume.pdf");
+    expect(pdf.status()).toBe(200);
+    expect(pdf.headers()["content-type"]).toContain("application/pdf");
+    const img = await request.get("/resume/Rubaiyat-Ruhin-Resume.webp");
+    expect(img.status()).toBe(200);
+  });
+});

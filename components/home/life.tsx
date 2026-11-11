@@ -1,10 +1,7 @@
-import {
-  f1Snapshot,
-  footballSnapshot,
-  type FootballData,
-  type F1Data,
-  type Result,
-} from "@/content/life";
+import { getF1 } from "@/lib/live/f1";
+import { getFootball } from "@/lib/live/football";
+import type { F1Data, FootballData, Result } from "@/lib/live/types";
+import { LifeSong } from "./now-playing";
 import { PhotoPreview } from "./photo-preview";
 
 const resultStyle: Record<Result, { bg: string; fg: string }> = {
@@ -82,7 +79,7 @@ function FootballCard({ d }: { d: FootballData }) {
         </div>
         <ol className="m-0 flex list-none flex-col gap-2.5 p-0">
           {d.table.map((r) => {
-            const me = r.team === d.team;
+            const me = r.teamId === d.teamId;
             return (
               <li key={r.team} className="flex flex-col gap-2.5">
                 {r.gapBefore && (
@@ -214,7 +211,10 @@ function F1Card({ d }: { d: F1Data }) {
 
 // "Off the clock": a sticky panel that scrolls sideways as you scroll down.
 // On phones and short screens the panels stack vertically instead.
-export function Life() {
+export async function Life() {
+  // Fetched on the server when the page is (re)built; the page refreshes every 15 minutes.
+  const [football, f1] = await Promise.all([getFootball(), getF1()]);
+
   return (
     <section
       id="life"
@@ -237,11 +237,12 @@ export function Life() {
             <p className="tc text-mu m-0 max-w-[34ch] text-[17px] leading-[1.6]">
               Photos, matchdays and race weekends.<span className="lkeep"> Keep scrolling →</span>
             </p>
+            <LifeSong />
           </div>
 
           <PhotoPreview />
-          <FootballCard d={footballSnapshot} />
-          <F1Card d={f1Snapshot} />
+          {football && <FootballCard d={football} />}
+          {f1 && <F1Card d={f1} />}
           <div className="lspacer w-6 shrink-0" />
         </div>
         <div className="lifebarwrap mx-auto box-border w-full max-w-[1180px] px-6">

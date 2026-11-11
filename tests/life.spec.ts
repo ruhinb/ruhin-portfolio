@@ -102,3 +102,36 @@ test("smooth scrolling runs with a mouse, not on touch screens", async ({ page }
   if (isPhone(page)) await expect(page.locator("html")).not.toHaveClass(/lenis/);
   else await expect(page.locator("html")).toHaveClass(/lenis/);
 });
+
+test.describe("live data (test fixtures)", () => {
+  test.beforeEach(async ({ page }) => skipIntro(page));
+
+  test("song shows in the hero and the Life section", async ({ page }) => {
+    await page.goto("/");
+    const pill = page.locator(".herosong");
+    await expect(pill).toContainText("NOW PLAYING ON SPOTIFY");
+    await expect(pill).toContainText("Test Track");
+    await expect(page.locator("#life").getByRole("link", { name: /Test Track/ })).toHaveAttribute(
+      "href",
+      "https://open.spotify.com/",
+    );
+  });
+
+  test("the now-playing route answers and is cached briefly", async ({ request }) => {
+    const res = await request.get("/api/now-playing");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["cache-control"]).toContain("s-maxage=20");
+    expect((await res.json()).status).toBe("playing");
+  });
+
+  test("the Spotify setup pages are closed without the app's keys", async ({ request }) => {
+    expect((await request.get("/api/spotify/login", { maxRedirects: 0 })).status()).toBe(404);
+    expect((await request.get("/api/spotify/callback?code=x&state=y")).status()).toBe(404);
+  });
+
+  test("United is highlighted in the table", async ({ page }) => {
+    await page.goto("/");
+    const row = page.locator("#life ol li").filter({ hasText: "Man United" });
+    await expect(row.locator("span").first()).toHaveCSS("font-weight", "600");
+  });
+});

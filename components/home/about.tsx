@@ -19,10 +19,11 @@ export function About() {
         <div className="max-w-[460px] min-w-0 flex-[1_1_320px]">
           <div className="portrait tc bg-sf2 relative aspect-[4/5] overflow-hidden rounded-3xl">
             <Image
+              quality={90}
               src={about.portrait.src}
               alt={about.portrait.alt}
               fill
-              sizes="(max-width: 760px) 100vw, 460px"
+              sizes="(max-width: 760px) 100vw, 500px"
               className="par object-cover"
             />
             <span className="absolute bottom-3.5 left-3.5 inline-flex items-center gap-2 rounded-full bg-[rgba(13,14,16,0.62)] px-3 py-[7px] font-mono text-[11px] tracking-[0.06em] text-[#ededea] backdrop-blur-[8px]">

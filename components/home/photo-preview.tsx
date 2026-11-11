@@ -67,10 +67,11 @@ export function PhotoPreview() {
               className="gtile relative min-h-[160px] cursor-zoom-in overflow-hidden rounded-[18px] border-0 bg-transparent p-0"
             >
               <Image
+                quality={90}
                 src={photoSrc(p)}
                 alt={p.caption}
                 fill
-                sizes="(max-width: 760px) 33vw, 240px"
+                sizes="(max-width: 760px) 50vw, 540px"
                 className="object-cover"
               />
               {more && (

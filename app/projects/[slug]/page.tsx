@@ -118,6 +118,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
           <figure className="rv mx-auto m-0 flex max-w-[1180px] flex-col gap-3.5">
             <div className="imgin tc border-bd overflow-hidden rounded-[20px] border bg-white">
               <Image
+                quality={90}
                 src={p.hero.src}
                 alt={p.hero.alt}
                 width={p.hero.w}
@@ -178,6 +179,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
                   <figure className={`rv m-0 min-w-0 ${wide ? "flex-none" : "flex-[1.5_1_480px]"}`}>
                     <div className="imgin tc border-bd overflow-hidden rounded-[18px] border bg-white">
                       <Image
+                        quality={90}
                         src={f.img.src}
                         alt={f.img.alt}
                         width={f.img.w}

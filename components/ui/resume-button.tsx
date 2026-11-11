@@ -8,13 +8,21 @@ import { openResume } from "@/lib/resume";
 export function ResumeButton({
   className,
   children,
+  magnetic,
 }: {
   className?: string;
   children?: ReactNode;
+  magnetic?: boolean;
 }) {
   if (!site.resume.ready) return null;
   return (
-    <button type="button" aria-haspopup="dialog" onClick={openResume} className={className}>
+    <button
+      type="button"
+      aria-haspopup="dialog"
+      onClick={openResume}
+      data-mag={magnetic || undefined}
+      className={className}
+    >
       {children ?? "Resume"}
     </button>
   );

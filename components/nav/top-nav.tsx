@@ -21,6 +21,7 @@ export function TopNav() {
         <a
           href="#top"
           aria-label="Back to top"
+          data-mag
           className="tc bg-inv text-inv-tx flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-serif text-[19px] italic no-underline"
         >
           Ru

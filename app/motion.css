@@ -41,6 +41,39 @@
     border-color 0.6s ease;
 }
 
+/* ---------- Cursor and magnetic buttons ---------- */
+[data-mag] {
+  transition:
+    transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+    background-color 0.6s ease,
+    color 0.5s ease,
+    border-color 0.6s ease,
+    opacity 0.3s ease !important;
+}
+.curdot {
+  transition:
+    width 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    height 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    margin 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.3s ease;
+}
+.curdot.big {
+  width: 46px !important;
+  height: 46px !important;
+  margin: -23px 0 0 -23px !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  .curon,
+  .curon * {
+    cursor: none !important;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .curlayer {
+    display: none;
+  }
+}
+
 /* ---------- Loader (first visit in a browser session only) ---------- */
 .loader {
   animation: loaderout 1.05s cubic-bezier(0.8, 0, 0.15, 1) 1.85s forwards;
@@ -481,7 +514,8 @@
   .lname {
     transform: none;
   }
-  .loader {
+  .loader,
+  .curlayer {
     display: none;
   }
 }

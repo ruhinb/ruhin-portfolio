@@ -78,11 +78,34 @@ export function parseNowPlaying(
   return newest ? fromTrack(newest, "recent") : { status: "off", reason: "no history" };
 }
 
+// Kept in memory between requests (Vercel reuses a warm server for a while), so Spotify is
+// asked as little as possible: it answers "429 too many requests" when asked too often.
+const memory: {
+  token?: { value: string; until: number };
+  history?: { value: unknown; at: number };
+  lastSong?: NowPlaying;
+  blockedUntil?: number;
+} = {};
+const HISTORY_FOR = 5 * 60_000; // the history barely changes, so ask for it at most every 5 minutes
+
+class RateLimited extends Error {}
+
+/** On 429, Spotify says how long to wait (Retry-After, in seconds). Don't ask again until then. */
+function checkLimit(res: Response) {
+  if (res.status !== 429) return;
+  const wait = Number(res.headers.get("retry-after")) || 60;
+  memory.blockedUntil = Date.now() + Math.min(wait, 6 * 3600) * 1000;
+  console.error(`[spotify] rate limited for ${wait}s`);
+  throw new RateLimited("rate limited");
+}
+
 async function accessToken() {
   const id = process.env.SPOTIFY_CLIENT_ID;
   const secret = process.env.SPOTIFY_CLIENT_SECRET;
   const refresh = process.env.SPOTIFY_REFRESH_TOKEN;
   if (!id || !secret || !refresh) return null;
+  // An access token lasts an hour; reuse it instead of fetching a new one on every request.
+  if (memory.token && memory.token.until > Date.now()) return memory.token.value;
   const res = await fetch(TOKEN_URL, {
     method: "POST",
     headers: {
@@ -93,12 +116,30 @@ async function accessToken() {
     cache: "no-store",
     signal: AbortSignal.timeout(6000),
   });
+  checkLimit(res);
   if (!res.ok) throw new Error(`spotify token: ${res.status}`);
-  return ((await res.json()) as { access_token: string }).access_token;
+  const json = (await res.json()) as { access_token: string; expires_in?: number };
+  memory.token = {
+    value: json.access_token,
+    until: Date.now() + ((json.expires_in ?? 3600) - 120) * 1000,
+  };
+  return json.access_token;
+}
+
+// While Spotify is refusing, show the last song we did get rather than nothing.
+const fallback = (reason: string): NowPlaying =>
+  memory.lastSong && memory.lastSong.status !== "off"
+    ? { ...memory.lastSong, status: "recent", progressMs: 0 }
+    : { status: "off", reason };
+
+function remember(np: NowPlaying) {
+  if (np.status !== "off") memory.lastSong = np;
+  return np;
 }
 
 export async function getNowPlaying(): Promise<NowPlaying> {
   if (process.env.LIVE_DATA_FIXTURES === "1") return (await import("./fixtures")).nowPlaying;
+  if (memory.blockedUntil && memory.blockedUntil > Date.now()) return fallback("rate limited");
   try {
     const token = await accessToken();
     if (!token) return { status: "off", reason: "not set up" };
@@ -108,19 +149,29 @@ export async function getNowPlaying(): Promise<NowPlaying> {
       signal: AbortSignal.timeout(6000),
     };
     const cur = await fetch(`${API}/currently-playing`, opts);
+    checkLimit(cur);
+    if (cur.status === 401) memory.token = undefined;
     if (cur.status !== 200 && cur.status !== 204) console.error("[spotify] now:", cur.status);
     const current = cur.status === 200 ? await cur.json() : null;
     if (current?.item && (current.currently_playing_type ?? "track") === "track")
-      return parseNowPlaying(current, null);
-    const rec = await fetch(`${API}/recently-played?limit=20`, opts);
-    if (!rec.ok) {
-      console.error("[spotify] history:", rec.status);
-      return { status: "off", reason: `history ${rec.status}` };
+      return remember(parseNowPlaying(current, null));
+
+    if (!memory.history || Date.now() - memory.history.at > HISTORY_FOR) {
+      const rec = await fetch(`${API}/recently-played?limit=20`, opts);
+      checkLimit(rec);
+      if (!rec.ok) {
+        console.error("[spotify] history:", rec.status);
+        return fallback(`history ${rec.status}`);
+      }
+      memory.history = { value: await rec.json(), at: Date.now() };
     }
-    return parseNowPlaying(current, await rec.json());
+    return remember(
+      parseNowPlaying(current, memory.history.value as Parameters<typeof parseNowPlaying>[1]),
+    );
   } catch (err) {
+    if (err instanceof RateLimited) return fallback("rate limited");
     console.error("[spotify]", err);
     const msg = err instanceof Error ? err.message : "";
-    return { status: "off", reason: msg.startsWith("spotify token") ? msg : "error" };
+    return fallback(msg.startsWith("spotify token") ? msg : "error");
   }
 }

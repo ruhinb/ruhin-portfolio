@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
+// Vercel serves only HTTPS. Locally and in CI the site runs on plain http://localhost,
+// where Safari would follow upgrade-insecure-requests to https://localhost and fail.
+const onVercel = process.env.VERCEL === "1";
 
 /*
  * Content Security Policy: what the browser may load and run on this site.
@@ -26,7 +29,7 @@ const csp = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  ...(isDev ? [] : ["upgrade-insecure-requests"]),
+  ...(onVercel ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
 const securityHeaders = [

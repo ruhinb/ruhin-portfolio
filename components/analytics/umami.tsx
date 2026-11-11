@@ -12,7 +12,7 @@ export function Umami() {
       src="/u/s.js"
       data-website-id={site.umamiWebsiteId}
       data-host-url="/u"
-      data-domains={site.domain}
+      data-domains={`${site.domain},www.${site.domain}`}
       data-do-not-track="true"
       data-exclude-search="true"
     />

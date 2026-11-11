@@ -3,6 +3,7 @@ import { GeistMono, GeistSans, InstrumentSerif } from "./fonts";
 import { IntroScript } from "@/components/intro-script";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Cursor } from "@/components/ui/cursor";
+import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { site } from "@/content/site";
 import "./globals.css";
 import "./motion.css";
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           {children}
           <Cursor />
+          <SmoothScroll />
         </ThemeProvider>
       </body>
     </html>

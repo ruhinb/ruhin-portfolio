@@ -48,7 +48,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // WebP only: AVIF is a little smaller but many times slower to create on the first request.
+    formats: ["image/webp"],
     remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }],
   },
   async headers() {

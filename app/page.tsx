@@ -2,10 +2,12 @@ import { About } from "@/components/home/about";
 import { Contact } from "@/components/home/contact";
 import { Experience } from "@/components/home/experience";
 import { Hero } from "@/components/home/hero";
+import { Life } from "@/components/home/life";
 import { Projects } from "@/components/home/projects";
 import { ScrollFallback } from "@/components/motion/scroll-fallback";
 import { MobileNav } from "@/components/nav/mobile-nav";
 import { TopNav } from "@/components/nav/top-nav";
+import { Gallery } from "@/components/overlays/gallery";
 import { Loader } from "@/components/overlays/loader";
 import { ResumeViewer } from "@/components/overlays/resume-viewer";
 import { PageBehaviour } from "@/components/page-behaviour";
@@ -36,6 +38,7 @@ export default function Home() {
             <About />
             <Experience />
             <Projects />
+            <Life />
             <div className="h-[120px]" />
           </div>
         </div>
@@ -43,6 +46,7 @@ export default function Home() {
       </main>
 
       <ResumeViewer />
+      <Gallery />
       <Grain />
       <PageBehaviour />
       <ScrollFallback />

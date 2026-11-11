@@ -108,15 +108,3 @@ body {
   background: var(--accent);
   color: #16181b;
 }
-
-/* Visitors who ask their device for less motion get none of the site's animation. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}

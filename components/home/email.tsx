@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { site } from "@/content/site";
+import { track } from "@/lib/analytics";
 import { useMounted } from "@/lib/use-mounted";
 
 const address = `${site.email.user}@${site.email.domain}`;
@@ -13,6 +14,7 @@ export function Email() {
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
+    track("Copy email");
     try {
       await navigator.clipboard.writeText(address);
     } catch {
@@ -35,6 +37,7 @@ export function Email() {
     <div className="flex flex-wrap items-center gap-3">
       <a
         href={mounted ? `mailto:${address}` : undefined}
+        onClick={() => track("Open email link")}
         className="email font-serif text-[clamp(26px,3vw,40px)] [overflow-wrap:anywhere] underline decoration-1 underline-offset-8"
       >
         {site.email.user}

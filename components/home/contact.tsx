@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Fragment } from "react";
 import { marquee } from "@/content/about";
 import { site } from "@/content/site";
@@ -81,6 +82,7 @@ export async function Contact() {
             <a
               href={site.links.linkedin}
               target="_blank"
+              data-umami-event="Open LinkedIn"
               rel="noopener noreferrer"
               data-mag
               className={pill}
@@ -90,6 +92,7 @@ export async function Contact() {
             <a
               href={site.links.github}
               target="_blank"
+              data-umami-event="Open GitHub profile"
               rel="noopener noreferrer"
               data-mag
               className={pill}
@@ -107,9 +110,14 @@ export async function Contact() {
           <span>
             © {year} {site.name} · {site.location}
           </span>
-          <a href="#top" className="no-underline">
-            Back to top ↑
-          </a>
+          <span className="flex gap-5">
+            <Link href="/privacy" className="no-underline">
+              Privacy
+            </Link>
+            <a href="#top" className="no-underline">
+              Back to top ↑
+            </a>
+          </span>
         </footer>
       </div>
     </section>

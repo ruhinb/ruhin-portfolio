@@ -12,6 +12,16 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    # Major versions of the build tools change how the project compiles,
+    # so they're upgraded by hand after checking Next.js supports them.
+    # @types/node tracks the Node.js version Vercel runs, not the newest.
+    ignore:
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
+      - dependency-name: "@types/node"
+        update-types: [version-update:semver-major]
     commit-message:
       prefix: "chore(deps)"
 

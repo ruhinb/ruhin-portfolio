@@ -247,11 +247,24 @@ test("spotify: playing, last played, and nothing at all", () => {
     progressMs: 5000,
     durationMs: 200000,
   });
-  // Paused, or a podcast: fall back to the last track played.
+  // Paused or stopped: the track Spotify still has loaded is the last one played,
+  // even if the listening history says otherwise.
+  const older = { ...track, name: "Older song" };
   expect(
-    parseNowPlaying({ is_playing: false, progress_ms: 0, item: track }, { items: [{ track }] })
-      .status,
-  ).toBe("recent");
+    parseNowPlaying(
+      { is_playing: false, progress_ms: 0, item: track },
+      { items: [{ track: older, played_at: "2026-11-11T10:00:00Z" }] },
+    ),
+  ).toMatchObject({ status: "recent", title: "Song" });
+  // Nothing loaded: the newest entry in the history wins, whatever order it arrives in.
+  expect(
+    parseNowPlaying(null, {
+      items: [
+        { track: older, played_at: "2026-11-01T10:00:00Z" },
+        { track, played_at: "2026-11-11T10:00:00Z" },
+      ],
+    }),
+  ).toMatchObject({ status: "recent", title: "Song" });
   expect(
     parseNowPlaying(
       { is_playing: true, progress_ms: 0, item: track, currently_playing_type: "episode" },

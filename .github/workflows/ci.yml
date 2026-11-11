@@ -17,6 +17,11 @@ jobs:
     name: Lint, type check, build, test
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Playwright's official image already has everything Chrome and WebKit need, so the
+    # job doesn't depend on Ubuntu's package servers. Keep the tag in step with the
+    # @playwright/test version in package.json.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
     env:
       # The live cards use stand-in data in CI instead of calling Spotify, football-data and Jolpica.
       LIVE_DATA_FIXTURES: "1"
@@ -45,8 +50,10 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Already in the image; this only downloads them if package.json moved to a newer version.
       - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium webkit
+        timeout-minutes: 10
+        run: npx playwright install chromium webkit
 
       - name: End-to-end tests
         run: npm run test:e2e

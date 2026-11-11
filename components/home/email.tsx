@@ -44,6 +44,7 @@ export function Email() {
       <button
         type="button"
         onClick={copy}
+        data-mag
         className={`tc h-10 cursor-pointer rounded-full border px-4 font-sans text-[13px] font-medium ${
           copied ? "bg-accent border-accent text-[#0b0d10]" : "border-bd2 text-tx bg-transparent"
         }`}

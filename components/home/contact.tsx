@@ -82,14 +82,22 @@ export async function Contact() {
               href={site.links.linkedin}
               target="_blank"
               rel="noopener noreferrer"
+              data-mag
               className={pill}
             >
               LinkedIn ↗
             </a>
-            <a href={site.links.github} target="_blank" rel="noopener noreferrer" className={pill}>
+            <a
+              href={site.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-mag
+              className={pill}
+            >
               GitHub ↗
             </a>
             <ResumeButton
+              magnetic
               className={`${pill} cursor-pointer bg-transparent font-sans text-inherit`}
             />
           </div>

@@ -209,3 +209,28 @@ test.describe("resume viewer", () => {
     expect(img.status()).toBe(200);
   });
 });
+
+test.describe("cursor", () => {
+  test.beforeEach(async ({ page }) => skipIntro(page));
+
+  test("follows the mouse and grows over links", async ({ page }) => {
+    test.skip(isPhone(page), "mouse only");
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveClass(/curon/);
+    const dot = page.locator(".curdot");
+    await page.mouse.move(300, 300);
+    await page.mouse.move(320, 320);
+    await expect(dot).toHaveCSS("opacity", "1");
+    await page.getByRole("link", { name: "See my work" }).hover();
+    await expect(dot).toHaveClass(/big/);
+    await page.mouse.move(700, 200);
+    await expect(dot).not.toHaveClass(/big/);
+  });
+
+  test("stays off on touch screens and for reduced motion", async ({ page }) => {
+    if (!isPhone(page)) await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await expect(page.locator("html")).not.toHaveClass(/curon/);
+    await expect(page.locator(".curlayer")).toBeHidden();
+  });
+});

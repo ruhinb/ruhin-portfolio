@@ -87,6 +87,7 @@ export function Hero() {
         <div className="intro flex flex-wrap items-center gap-[22px]" style={delay(2.9)}>
           <a
             href="#work"
+            data-mag
             className="tc bg-inv text-inv-tx inline-flex h-[50px] items-center gap-2.5 rounded-full px-6 text-[15px] font-medium no-underline"
           >
             See my work

@@ -25,7 +25,8 @@ export const site = {
   },
   // Umami visitor stats. The website ID is public (it appears in every page's HTML).
   // Stats are only sent from the live domain, never from previews or localhost.
-  umamiWebsiteId: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID ?? "",
+  umamiWebsiteId:
+    process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID ?? "43ce1992-71b8-499f-ae61-51de24ecc27e",
 } as const;
 
 // The home page's sections, in order. `live: false` hides a section from the

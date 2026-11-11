@@ -12,7 +12,7 @@ test.describe("life section", () => {
     const life = page.locator("#life");
     const track = page.locator(".htrack");
     const top = await life.evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
-    const height = await life.evaluate((el) => el.offsetHeight);
+    const height = await life.evaluate((el) => (el as HTMLElement).offsetHeight);
     await page.evaluate((y) => window.scrollTo(0, y), top + height / 2);
     const x = () => track.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
     if (isPhone(page)) {

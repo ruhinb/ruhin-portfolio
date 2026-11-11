@@ -1,15 +1,15 @@
 import { randomBytes } from "node:crypto";
-import { SPOTIFY_SCOPES } from "@/lib/live/spotify";
+import { SPOTIFY_SCOPES, setupClosedReason } from "@/lib/live/spotify";
 
 // One-time setup: sends Ru to Spotify to allow read-only access to what he's playing.
 // Only works until SPOTIFY_REFRESH_TOKEN is saved in Vercel; after that it's a 404.
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const id = process.env.SPOTIFY_CLIENT_ID;
-  if (!id || !process.env.SPOTIFY_CLIENT_SECRET || process.env.SPOTIFY_REFRESH_TOKEN) {
-    return new Response("Not found", { status: 404 });
-  }
+  const id = process.env.SPOTIFY_CLIENT_ID!;
+  const closed = setupClosedReason();
+  if (closed)
+    return new Response(closed, { status: 404, headers: { "Cache-Control": "no-store" } });
   const origin = new URL(request.url).origin;
   const state = randomBytes(16).toString("hex");
   const url = new URL("https://accounts.spotify.com/authorize");

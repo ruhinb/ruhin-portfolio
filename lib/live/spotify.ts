@@ -14,6 +14,18 @@ type Track = {
   album: { images: { url: string; width: number }[] };
 };
 
+/** Why the one-time setup pages are switched off, or null if they're open. Says which setting is missing, never its value. */
+export function setupClosedReason(): string | null {
+  const missing = ["SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET"].filter(
+    (k) => !process.env[k]?.trim(),
+  );
+  if (missing.length)
+    return `Spotify setup is off: ${missing.join(" and ")} ${missing.length > 1 ? "aren't" : "isn't"} set for this deployment.`;
+  if (process.env.SPOTIFY_REFRESH_TOKEN?.trim())
+    return "Spotify is already connected, so this setup page is switched off.";
+  return null;
+}
+
 export const basicAuth = (id: string, secret: string) =>
   "Basic " + Buffer.from(`${id}:${secret}`).toString("base64");
 

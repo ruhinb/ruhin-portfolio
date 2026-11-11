@@ -1,4 +1,4 @@
-import { basicAuth } from "@/lib/live/spotify";
+import { basicAuth, setupClosedReason } from "@/lib/live/spotify";
 
 // One-time setup, step 2: Spotify sends Ru back here with a code, which is swapped for a
 // long-lived refresh token and shown once so he can save it in Vercel. Only works until
@@ -16,10 +16,11 @@ const page = (title: string, body: string) =>
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 export async function GET(request: Request) {
-  const id = process.env.SPOTIFY_CLIENT_ID;
-  const secret = process.env.SPOTIFY_CLIENT_SECRET;
-  if (!id || !secret || process.env.SPOTIFY_REFRESH_TOKEN)
-    return new Response("Not found", { status: 404 });
+  const closed = setupClosedReason();
+  if (closed)
+    return new Response(closed, { status: 404, headers: { "Cache-Control": "no-store" } });
+  const id = process.env.SPOTIFY_CLIENT_ID!;
+  const secret = process.env.SPOTIFY_CLIENT_SECRET!;
 
   const url = new URL(request.url);
   const code = url.searchParams.get("code");

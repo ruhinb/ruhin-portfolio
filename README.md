@@ -12,7 +12,7 @@ The personal site of Rubaiyat (Ru) Ruhin, a data analyst in Adelaide: case studi
 | Styling       | Tailwind CSS 4, with the design's colours as CSS variables                  |
 | Light / dark  | next-themes (follows the device first, then remembers the visitor's choice) |
 | Motion        | GSAP + ScrollTrigger, Lenis smooth scrolling (from stage 2)                 |
-| Content       | MDX case studies and TypeScript data files in `content/`                    |
+| Content       | TypeScript data files in `content/` (projects, experience, about, site)     |
 | Fonts         | Instrument Serif, Geist, Geist Mono, all self-hosted                        |
 | Hosting       | Vercel, deployed from `main`; every pull request gets a preview link        |
 | Visitor stats | Umami, routed through the site's own domain (stage 6)                       |
@@ -53,9 +53,10 @@ tests/        Playwright end-to-end tests
 
 ## Adding content
 
-- **A project:** copy a file in `content/projects/`, fill in the data block at the top, add images to `public/images/projects/<slug>/`.
+- **A case study:** copy one of the objects in `content/projects.ts`, give it a new `slug`, and add its images to `public/images/projects/<slug>/`. The home page card, the page at `/projects/<slug>` and the "next project" chain all follow.
+- **A smaller project:** add an entry to `moreProjects` in the same file.
 - **A job:** add an entry to `content/experience.ts`.
-- **A photo:** strip its location data, add it to `public/images/life/`, then add a line to `content/photos.ts`.
+- **A photo:** add it to `public/images/life/`, run `npm run clean-photos public/images/life` to strip location data, then add a line to `content/photos.ts`.
 - **A new resume:** replace `public/resume/Rubaiyat-Ruhin-Resume.pdf`, keeping the name.
 
 ## Working on it

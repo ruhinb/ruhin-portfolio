@@ -1,5 +1,4 @@
-// The date the site was last built (deployed). Cached so pages stay pre-built.
+// The year the site was last built (deployed). Pages are pre-built, so this is fixed per deploy.
 export async function buildYear() {
-  "use cache";
   return new Date().getFullYear();
 }

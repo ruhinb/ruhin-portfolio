@@ -122,6 +122,54 @@ export function ScrollFallback() {
             },
           ),
         );
+
+        // Project cards: each one shrinks and dims as the next slides up over it.
+        // "contain 55%" = the next card's top has travelled 55% of the way from (vh - h) to 0.
+        const cards = gsap.utils.toArray<HTMLElement>(".stackcard");
+        if (window.innerWidth >= 900) {
+          cards.forEach((card, i) => {
+            const nextCard = cards[i + 1];
+            if (!nextCard) return;
+            const end = () => `top ${Math.max(0, 0.45 * (vh() - nextCard.offsetHeight))}px`;
+            gsap.fromTo(
+              card,
+              { scale: 1 },
+              { scale: 0.92, ease: "none", ...scrub(nextCard, "top bottom", end) },
+            );
+            const dim = card.querySelector(".dimv");
+            if (dim)
+              gsap.fromTo(
+                dim,
+                { opacity: 0 },
+                { opacity: 0.72, ease: "none", ...scrub(nextCard, "top bottom", end) },
+              );
+          });
+        }
+
+        // Case study images open out as they come into view.
+        gsap.utils.toArray<HTMLElement>(".imgin").forEach((el) =>
+          gsap.fromTo(
+            el,
+            { clipPath: "inset(14% 8% 14% 8% round 28px)", scale: 1.06 },
+            {
+              clipPath: "inset(0% 0% 0% 0% round 20px)",
+              scale: 1,
+              ease: "none",
+              ...scrub(el, "top bottom", () => `top+=${0.45 * (vh() + el.offsetHeight)} bottom`),
+            },
+          ),
+        );
+
+        // Reading progress bar on case studies.
+        gsap.utils
+          .toArray<HTMLElement>(".progress")
+          .forEach((el) =>
+            gsap.fromTo(
+              el,
+              { scaleX: 0 },
+              { scaleX: 1, ease: "none", scrollTrigger: { start: 0, end: "max", scrub: true } },
+            ),
+          );
       });
       revert = () => ctx.revert();
     })();

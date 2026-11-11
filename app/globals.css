@@ -33,6 +33,9 @@
   --grain-blend: multiply;
   --sheet-shadow: 0.08;
   --card-shadow: 0.07;
+  --red: #b4352a;
+  --blue: #1f5fc4;
+  --green: #1f7a52;
 
   color-scheme: light;
 }
@@ -61,8 +64,34 @@
   --grain-blend: screen;
   --sheet-shadow: 0.5;
   --card-shadow: 0.45;
+  --red: #ff8a7a;
+  --blue: #7db6ff;
+  --green: #7ce0b0;
 
   color-scheme: dark;
+}
+
+/* Case study pages use a slightly lighter (and in dark, slightly deeper) palette. */
+.case {
+  --bg: #f6f4ef;
+  --sf: #ffffff;
+  --sf2: #ece8e0;
+  --bd: #e2ded5;
+  --nav-bg: rgba(246, 244, 239, 0.74);
+}
+.dark .case {
+  --bg: #0d0e10;
+  --sf: #15171a;
+  --sf2: #1b1e22;
+  --bd: #24272c;
+  --bd2: #33373d;
+  --nav-bg: rgba(21, 23, 26, 0.72);
+}
+html:has(.case) {
+  background: #f6f4ef;
+}
+html.dark:has(.case) {
+  background: #0d0e10;
 }
 
 /* Expose the tokens to Tailwind: bg-bg, text-tx, border-bd, text-accent, font-serif… */
@@ -82,6 +111,9 @@
   --color-inv: var(--inv);
   --color-inv-tx: var(--inv-tx);
   --color-line: var(--line);
+  --color-red: var(--red);
+  --color-blue: var(--blue);
+  --color-green: var(--green);
 
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;

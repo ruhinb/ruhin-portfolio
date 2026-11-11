@@ -225,6 +225,51 @@
   }
 }
 
+/* ---------- Projects ---------- */
+.card {
+  transition:
+    transform 0.8s cubic-bezier(0.65, 0, 0.2, 1),
+    opacity 0.6s ease,
+    box-shadow 0.6s ease;
+}
+.arrow {
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.3s ease;
+}
+.arrow:hover {
+  transform: scale(1.06);
+}
+.prow {
+  transition:
+    padding-left 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.3s ease;
+}
+.prow:hover {
+  padding-left: 16px;
+}
+.bar {
+  transition: width 0.8s cubic-bezier(0.65, 0, 0.25, 1);
+}
+
+/* ---------- Case study curtain (first time each case study is opened in a session) ---------- */
+.curtain {
+  animation: loaderout 1s cubic-bezier(0.8, 0, 0.15, 1) 0.75s forwards;
+}
+.curtain .lname {
+  animation: chup 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s forwards;
+}
+.case {
+  --cd: 1.15s;
+}
+:root[data-case-quick] .case {
+  --cd: 0s;
+}
+.cintro {
+  animation: intro 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
 /* ---------- Text reveals ---------- */
 .mask {
   display: block;
@@ -330,6 +375,112 @@
     animation-timeline: view();
     animation-range: cover 0% cover 100%;
   }
+  :root:not(.motion-js) .stack {
+    timeline-scope: --fc0, --fc1, --fc2, --fc3, --fc4, --fc5, --fc6, --fc7;
+  }
+  :root:not(.motion-js) .fc0 {
+    view-timeline: --fc0 block;
+  }
+  :root:not(.motion-js) .fc1 {
+    view-timeline: --fc1 block;
+  }
+  :root:not(.motion-js) .fc2 {
+    view-timeline: --fc2 block;
+  }
+  :root:not(.motion-js) .fc3 {
+    view-timeline: --fc3 block;
+  }
+  :root:not(.motion-js) .fc4 {
+    view-timeline: --fc4 block;
+  }
+  :root:not(.motion-js) .fc5 {
+    view-timeline: --fc5 block;
+  }
+  :root:not(.motion-js) .fc6 {
+    view-timeline: --fc6 block;
+  }
+  :root:not(.motion-js) .fc7 {
+    view-timeline: --fc7 block;
+  }
+  :root:not(.motion-js) .shrink0 {
+    animation: shrink linear both;
+    animation-timeline: --fc1;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink1 {
+    animation: shrink linear both;
+    animation-timeline: --fc2;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink2 {
+    animation: shrink linear both;
+    animation-timeline: --fc3;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink3 {
+    animation: shrink linear both;
+    animation-timeline: --fc4;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink4 {
+    animation: shrink linear both;
+    animation-timeline: --fc5;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink5 {
+    animation: shrink linear both;
+    animation-timeline: --fc6;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink6 {
+    animation: shrink linear both;
+    animation-timeline: --fc7;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink0 .dimv {
+    animation: dimv linear both;
+    animation-timeline: --fc1;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink1 .dimv {
+    animation: dimv linear both;
+    animation-timeline: --fc2;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink2 .dimv {
+    animation: dimv linear both;
+    animation-timeline: --fc3;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink3 .dimv {
+    animation: dimv linear both;
+    animation-timeline: --fc4;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink4 .dimv {
+    animation: dimv linear both;
+    animation-timeline: --fc5;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink5 .dimv {
+    animation: dimv linear both;
+    animation-timeline: --fc6;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .shrink6 .dimv {
+    animation: dimv linear both;
+    animation-timeline: --fc7;
+    animation-range: entry 0% contain 55%;
+  }
+  :root:not(.motion-js) .imgin {
+    animation: imgin linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 45%;
+  }
+  :root:not(.motion-js) .progress {
+    animation: progress linear both;
+    animation-timeline: scroll(root);
+  }
   :root:not(.motion-js) .bigtalk {
     animation: bigtalk linear both;
     animation-timeline: view();
@@ -403,6 +554,37 @@
     transform: translateY(7%) scale(1.08);
   }
 }
+@keyframes shrink {
+  to {
+    transform: scale(0.92);
+  }
+}
+@keyframes dimv {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.72;
+  }
+}
+@keyframes imgin {
+  from {
+    clip-path: inset(14% 8% 14% 8% round 28px);
+    transform: scale(1.06);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 20px);
+    transform: none;
+  }
+}
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
 @keyframes bigtalk {
   from {
     transform: scale(0.72) translateY(40px);
@@ -426,6 +608,26 @@
   .cwrap {
     padding-top: 44px !important;
     gap: 28px !important;
+  }
+}
+@media (max-width: 899px) {
+  .stackcard {
+    position: relative !important;
+    top: auto !important;
+    padding: 22px 20px 24px !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  .stackcard .dimv {
+    display: none !important;
+  }
+}
+@media (max-width: 640px) {
+  .chead {
+    padding-top: 120px !important;
+  }
+  .decbox {
+    padding: 22px !important;
   }
 }
 @media (max-width: 759px) {
@@ -514,6 +716,7 @@
   .lname {
     transform: none;
   }
+  .curtain,
   .loader,
   .curlayer {
     display: none;

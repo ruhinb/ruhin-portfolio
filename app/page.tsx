@@ -2,7 +2,7 @@ import { About } from "@/components/home/about";
 import { Contact } from "@/components/home/contact";
 import { Experience } from "@/components/home/experience";
 import { Hero } from "@/components/home/hero";
-import { ProjectsSoon } from "@/components/home/projects-soon";
+import { Projects } from "@/components/home/projects";
 import { ScrollFallback } from "@/components/motion/scroll-fallback";
 import { MobileNav } from "@/components/nav/mobile-nav";
 import { TopNav } from "@/components/nav/top-nav";
@@ -35,7 +35,7 @@ export default function Home() {
           >
             <About />
             <Experience />
-            <ProjectsSoon />
+            <Projects />
             <div className="h-[120px]" />
           </div>
         </div>

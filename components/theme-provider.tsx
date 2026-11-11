@@ -5,14 +5,7 @@ import type { ComponentProps } from "react";
 
 // Follows the visitor's device the first time, then remembers their choice.
 // The `dark` class goes on <html> before the page draws, so there's no white flash.
+// Colour transitions stay on, so switching themes fades as in the design.
 export function ThemeProvider(props: ComponentProps<typeof NextThemesProvider>) {
-  return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-      {...props}
-    />
-  );
+  return <NextThemesProvider attribute="class" defaultTheme="system" enableSystem {...props} />;
 }

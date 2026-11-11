@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { GeistMono, GeistSans, InstrumentSerif } from "./fonts";
+import { IntroScript } from "@/components/intro-script";
 import { ThemeProvider } from "@/components/theme-provider";
 import { site } from "@/content/site";
 import "./globals.css";
+import "./motion.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -37,6 +39,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${GeistSans.variable} ${GeistMono.variable} ${InstrumentSerif.variable} antialiased`}
     >
+      <head>
+        <IntroScript />
+      </head>
       <body className="min-h-dvh">
         <ThemeProvider>{children}</ThemeProvider>
       </body>

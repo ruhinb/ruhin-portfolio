@@ -1,22 +1,46 @@
-# Rubaiyat Ruhin · Portfolio
+# rubaiyat.dev
 
-The personal site of Rubaiyat (Ru) Ruhin, a data analyst in Adelaide: case studies in SQL, Python and Power BI, plus a little life outside work.
+The portfolio of **Rubaiyat (Ru) Ruhin**, a data analyst in Adelaide. Case studies in SQL, Python and Power BI, plus a little of life outside work.
 
-**Live:** [rubaiyat.dev](https://rubaiyat.dev)
+**→ [rubaiyat.dev](https://rubaiyat.dev)** · [LinkedIn](https://linkedin.com/in/rubaiyatalamruhin) · [Analysis projects](https://github.com/ruhinb/Data_Analysis_Projects)
 
-## Stack
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/home-dark.jpg">
+  <img src="docs/screenshots/home-light.jpg" alt="The home page of rubaiyat.dev: the name Rubaiyat Ruhin in a large serif, with the line 'I turn messy operational data into decisions people act on.'">
+</picture>
 
-| Layer         | Choice                                                                      |
-| ------------- | --------------------------------------------------------------------------- |
-| Framework     | Next.js 16 (App Router) + TypeScript                                        |
-| Styling       | Tailwind CSS 4, with the design's colours as CSS variables                  |
-| Light / dark  | next-themes (follows the device first, then remembers the visitor's choice) |
-| Motion        | GSAP + ScrollTrigger, Lenis smooth scrolling (from stage 2)                 |
-| Content       | TypeScript data files in `content/` (projects, experience, about, site)     |
-| Fonts         | Instrument Serif, Geist, Geist Mono, all self-hosted                        |
-| Hosting       | Vercel, deployed from `main`; every pull request gets a preview link        |
-| Visitor stats | Umami Cloud, routed through the site's own domain (no cookies)              |
-| Tests         | Playwright on desktop Chrome and iPhone Safari, in GitHub Actions           |
+## What's on the site
+
+- **Three case studies**, each written like a short report: the question, the findings with the actual Power BI pages, the decision, and how it was built.
+  - [PatientCare Analytics](https://rubaiyat.dev/projects/patientcare): where missed clinic appointments concentrate, and the reminder change that cut them.
+  - [Discount Guardrails](https://rubaiyat.dev/projects/discount): the discount level where a retailer starts losing money.
+  - [Slice & Co. Pizza Operations](https://rubaiyat.dev/projects/slice): rushes, basket size and rostering for a flat year of sales.
+- **Experience and resume**, with the resume viewable and downloadable on the page.
+- **Life**: photos from my iPhone, what I'm listening to on Spotify right now, and live Manchester United and Formula 1 cards.
+
+<img src="docs/screenshots/case-study.jpg" alt="A case study page: 'Finding 01, The line is 20%', next to a Power BI chart of profit at each discount level.">
+
+## How it's built
+
+| Part         | What I used                                                                                                                |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Framework    | Next.js 16 (App Router), React 19, TypeScript                                                                              |
+| Styling      | Tailwind CSS 4; light and dark themes from one set of colour variables                                                     |
+| Motion       | Native CSS scroll-driven animations, with a GSAP fallback for browsers that don't support them yet; Lenis smooth scrolling |
+| Live data    | Spotify Web API, football-data.org and Jolpica (F1), all fetched on the server and cached, so no keys reach the browser    |
+| Hosting      | Vercel, deployed from `main`                                                                                               |
+| Stats        | Umami: no cookies, served through the site's own domain                                                                    |
+| Tests and CI | Playwright end-to-end tests in Chrome and Safari (WebKit) on every pull request; `main` only accepts changes that pass     |
+
+A few details I cared about:
+
+- **Fast and static.** Every page is pre-built. The home page refreshes itself every 15 minutes so the football and F1 cards stay current, and the now-playing card checks Spotify every 30 seconds only while the tab is open.
+- **Private by default.** Photos have their location data stripped before upload, the email address never appears whole in the HTML, and the visitor stats record nothing personal ([privacy page](https://rubaiyat.dev/privacy)).
+- **Locked down.** Strict security headers, including a Content Security Policy that only allows the site's own scripts. There's no login, database or form to attack.
+- **Works everywhere.** Tested at widths from 320px phones to 1920px monitors, with keyboard navigation, focus handling in dialogs, and reduced motion respected.
+- **Shareable.** Each page draws its own link-preview image at build time, in the site's fonts, so links look right on LinkedIn, Slack and WhatsApp.
+
+<img src="docs/screenshots/life.jpg" alt="The Life section in dark mode: 'Off the clock', a row of iPhone photos, and the start of a live Manchester United card.">
 
 ## Run it locally
 
@@ -24,49 +48,12 @@ Needs Node.js 22.
 
 ```bash
 npm install
-cp .env.example .env.local   # fill in keys when the live-data stage arrives
-npm run dev                  # http://localhost:3000
+cp .env.example .env.local
+LIVE_DATA_FIXTURES=1 npm run dev   # http://localhost:3000, with stand-in data instead of live API keys
 ```
 
-## Checks
+`npm run check` runs lint, type checks and formatting; `npm run build && npm run test:e2e` runs the Playwright tests against a production build. Notes on updating content are in [docs/MAINTAINING.md](docs/MAINTAINING.md).
 
-```bash
-npm run lint          # ESLint
-npm run typecheck     # TypeScript
-npm run format:check  # Prettier (npm run format to fix)
-npm run build         # production build
-npm run test:e2e      # Playwright, against the production build
-```
+## Licence
 
-GitHub Actions runs all of these on every pull request, and `main` only accepts a merge when they pass.
-
-## Project layout
-
-```
-app/          pages, layout, fonts, global styles, API routes
-components/   UI pieces, grouped by section (home, case, overlays, nav, ui)
-content/      everything you edit as content: site details, projects, jobs, photos
-lib/          shared helpers (live data, motion, analytics)
-public/       images and the resume PDF, served as-is
-tests/        Playwright end-to-end tests
-```
-
-## Adding content
-
-- **A case study:** copy one of the objects in `content/projects.ts`, give it a new `slug`, and add its images to `public/images/projects/<slug>/`. The home page card, the page at `/projects/<slug>` and the "next project" chain all follow.
-- **A smaller project:** add an entry to `moreProjects` in the same file.
-- **A job:** add an entry to `content/experience.ts`.
-- **A photo:** add it to `public/images/life/`, run `npm run clean-photos public/images/life` to strip location data, then add a line to `content/photos.ts`.
-- **A new resume:** replace `public/resume/Rubaiyat-Ruhin-Resume.pdf`, keeping the name.
-
-## Working on it
-
-- `main` is always the live site. Work happens on a branch (`feat/…`, `fix/…`) and merges through a pull request after the preview is checked.
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `feat: add resume viewer`, `fix: mobile nav overflow`.
-- Secrets live in `.env.local` and Vercel's environment variables, never in the code.
-
-## Security
-
-Strict browser security headers are set in `next.config.ts`. Dependabot opens weekly update pull requests. The site has no login, database or forms.
-
-© Rubaiyat Ruhin. The code is shared for reference; the writing, photos and resume are not licensed for reuse.
+The code is here to read and learn from. The writing, case studies, photos and resume are mine and aren't licensed for reuse.

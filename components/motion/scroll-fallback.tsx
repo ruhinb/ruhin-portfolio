@@ -146,6 +146,39 @@ export function ScrollFallback() {
           });
         }
 
+        // Life: the panels slide sideways while the section is pinned (wide, tall screens only).
+        const life = document.querySelector<HTMLElement>(".lifesec");
+        const track = document.querySelector<HTMLElement>(".htrack");
+        if (
+          life &&
+          track &&
+          window.matchMedia("(min-width: 760px) and (min-height: 501px)").matches
+        ) {
+          const lifeScroll = {
+            trigger: life,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+            invalidateOnRefresh: true,
+          };
+          gsap.fromTo(
+            track,
+            { x: 0 },
+            {
+              x: () => -(track.scrollWidth - window.innerWidth),
+              ease: "none",
+              scrollTrigger: lifeScroll,
+            },
+          );
+          const bar = document.querySelector(".lifebar");
+          if (bar)
+            gsap.fromTo(
+              bar,
+              { scaleX: 0 },
+              { scaleX: 1, ease: "none", scrollTrigger: { ...lifeScroll } },
+            );
+        }
+
         // Case study images open out as they come into view.
         gsap.utils.toArray<HTMLElement>(".imgin").forEach((el) =>
           gsap.fromTo(

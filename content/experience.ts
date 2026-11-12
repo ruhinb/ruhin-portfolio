@@ -38,7 +38,7 @@ export const experience: Experience[] = [
     org: "Fieldbooster Limited · Bangladesh",
     open: true,
     points: [
-      "Found a reminder change that cut no-shows by 23% among the highest-risk patients, projected to keep BDT 0.87M a year, by evaluating a six-week pilot as an A/B test in SQL and Power BI.",
+      "Identified a reminder change that cut no-shows by 23% among the highest-risk patients, projected to keep BDT 0.87M a year, by evaluating a six-week pilot as an A/B test in SQL and Power BI.",
       "Cut weekly reporting time by 74% (244 to 62.5 minutes) by automating data preparation in PostgreSQL.",
       "Built Power BI dashboards with DAX and clinic, specialty and date filters, so the operations team could answer follow-up questions without an analyst.",
     ],

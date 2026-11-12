@@ -86,17 +86,26 @@ const memory: {
   lastSong?: NowPlaying;
   blockedUntil?: number;
 } = {};
-const HISTORY_FOR = 5 * 60_000; // the history barely changes, so ask for it at most every 5 minutes
+const HISTORY_FOR = 15 * 60_000; // the history barely changes, so ask for it at most every 15 minutes
 
 class RateLimited extends Error {}
 
-/** On 429, Spotify says how long to wait (Retry-After, in seconds). Don't ask again until then. */
+/**
+ * On 429, Spotify says how long to wait (Retry-After, in seconds), sometimes many hours.
+ * Asking again before then can restart the wait, so nothing is sent to Spotify until it ends.
+ */
 function checkLimit(res: Response) {
   if (res.status !== 429) return;
-  const wait = Number(res.headers.get("retry-after")) || 60;
-  memory.blockedUntil = Date.now() + Math.min(wait, 6 * 3600) * 1000;
-  console.error(`[spotify] rate limited for ${wait}s`);
+  const wait = Number(res.headers.get("retry-after")) || 600;
+  memory.blockedUntil = Date.now() + Math.min(wait, 48 * 3600) * 1000;
+  console.error(`[spotify] rate limited, Spotify asks to wait ${wait}s`);
   throw new RateLimited("rate limited");
+}
+
+/** "rate limited, retry in about 3h": non-secret, so it can be shown in /api/now-playing. */
+function limitedReason() {
+  const mins = Math.max(1, Math.round(((memory.blockedUntil ?? 0) - Date.now()) / 60_000));
+  return `rate limited, retry in about ${mins >= 90 ? `${Math.round(mins / 60)}h` : `${mins} min`}`;
 }
 
 async function accessToken() {
@@ -139,7 +148,7 @@ function remember(np: NowPlaying) {
 
 export async function getNowPlaying(): Promise<NowPlaying> {
   if (process.env.LIVE_DATA_FIXTURES === "1") return (await import("./fixtures")).nowPlaying;
-  if (memory.blockedUntil && memory.blockedUntil > Date.now()) return fallback("rate limited");
+  if (memory.blockedUntil && memory.blockedUntil > Date.now()) return fallback(limitedReason());
   try {
     const token = await accessToken();
     if (!token) return { status: "off", reason: "not set up" };
@@ -169,7 +178,7 @@ export async function getNowPlaying(): Promise<NowPlaying> {
       parseNowPlaying(current, memory.history.value as Parameters<typeof parseNowPlaying>[1]),
     );
   } catch (err) {
-    if (err instanceof RateLimited) return fallback("rate limited");
+    if (err instanceof RateLimited) return fallback(limitedReason());
     console.error("[spotify]", err);
     const msg = err instanceof Error ? err.message : "";
     return fallback(msg.startsWith("spotify token") ? msg : "error");

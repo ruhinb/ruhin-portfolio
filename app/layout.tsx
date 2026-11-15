@@ -35,7 +35,7 @@ const person = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Rubaiyat Alam Ruhin",
-  alternateName: ["Rubaiyat Ruhin", "Ru"],
+  alternateName: ["Rubaiyat (Ru) Ruhin", "Rubaiyat Ruhin", "Ru"],
   url: site.url,
   image: `${site.url}/images/portrait.jpg`,
   jobTitle: site.role,

@@ -102,6 +102,17 @@ test.describe("sections", () => {
     await expect(barista).toHaveAttribute("aria-expanded", "false");
   });
 
+  test("matches the current resume", async ({ page }) => {
+    await page.goto("/");
+    // CIBO started in March 2025.
+    await expect(page.getByRole("button", { name: /Barista/ })).toContainText("2025 — NOW");
+    // Only the two numbers are highlighted in the About summary, not the punctuation after them.
+    await expect(page.locator("#about p .text-ac-tx")).toHaveText(["23%", "74%"]);
+    // The deep learning repo was renamed; all three cards point at the new name.
+    const deep = page.locator('a[href="https://github.com/ruhinb/Deep_Learning_Projects"]');
+    await expect(deep).toHaveCount(3);
+  });
+
   test("email link works and Copy confirms", async ({ page, context, browserName }) => {
     if (browserName === "chromium") {
       await context.grantPermissions(["clipboard-read", "clipboard-write"]);

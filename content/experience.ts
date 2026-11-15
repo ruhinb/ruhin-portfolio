@@ -13,7 +13,7 @@ export type Experience = {
 export const experience: Experience[] = [
   {
     id: "cibo",
-    dates: "2024 — NOW",
+    dates: "2025 — NOW",
     role: "Barista",
     org: "CIBO Espresso · Adelaide",
     now: true,
@@ -38,9 +38,10 @@ export const experience: Experience[] = [
     org: "Fieldbooster Limited · Bangladesh",
     open: true,
     points: [
-      "Identified a reminder change that cut no-shows by 23% among the highest-risk patients, projected to keep BDT 0.87M a year, by evaluating a six-week pilot as an A/B test in SQL and Power BI.",
+      "Identified a reminder change that cut no-shows by 23% among the highest-risk patients, projected to keep BDT 0.87M a year in fees, by evaluating a six-week pilot as an A/B test in SQL and Power BI.",
       "Cut weekly reporting time by 74% (244 to 62.5 minutes) by automating data preparation in PostgreSQL.",
-      "Built Power BI dashboards with DAX and clinic, specialty and date filters, so the operations team could answer follow-up questions without an analyst.",
+      "Built and maintained Power BI dashboards with DAX measures and clinic, specialty and date filters, letting the operations team answer follow-up questions without an analyst.",
+      "Gathered client requirements in product meetings and agreed feasible solutions with developers.",
     ],
   },
   {

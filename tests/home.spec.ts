@@ -104,6 +104,8 @@ test.describe("sections", () => {
 
   test("matches the current resume", async ({ page }) => {
     await page.goto("/");
+    // The role line above the name.
+    await expect(page.locator("#top p").first()).toHaveText("DATA ANALYST · ADELAIDE");
     // CIBO started in March 2025.
     await expect(page.getByRole("button", { name: /Barista/ })).toContainText("2025 — NOW");
     // Only the two numbers are highlighted in the About summary, not the punctuation after them.

@@ -4,6 +4,7 @@ export const site = {
   shortName: "Ru",
   role: "Data Analyst",
   location: "Adelaide, South Australia",
+  city: "Adelaide", // shown with the role above the name: DATA ANALYST · ADELAIDE
   description:
     "Rubaiyat (Ru) Ruhin is a data analyst in Adelaide. SQL, Python and Power BI case studies on pricing, operations and patient care.",
   tagline: "I turn messy operational data into decisions people act on.",

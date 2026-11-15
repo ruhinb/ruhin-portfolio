@@ -7,7 +7,7 @@ export const about = {
     { k: "BASED IN", v: "Adelaide, South Australia" },
     { k: "WORK RIGHTS", v: "Full working rights in Australia" },
     { k: "TOOLS", v: "SQL · Power BI · Python · Excel · R" },
-    { k: "LANGUAGES", v: "English · Bengali (native)" },
+    { k: "LANGUAGES", v: "English (Professional) · Bengali (Native)" },
     { k: "OPEN TO", v: "Adelaide · Perth" },
   ],
   portrait: { src: "/images/portrait.jpg", alt: "Portrait of Rubaiyat Ruhin" },

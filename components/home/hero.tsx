@@ -68,6 +68,13 @@ export function Hero() {
       </span>
 
       <div className="heroout relative mx-auto flex w-full max-w-[1180px] origin-[30%_50%] flex-col gap-[30px]">
+        <p
+          className="intro tc text-mu m-0 -mb-1.5 flex items-center gap-3 font-mono text-[12.5px] tracking-[0.16em]"
+          style={delay(1.95)}
+        >
+          <span aria-hidden="true" className="pulse-live bg-green h-2 w-2 shrink-0 rounded-full" />
+          {site.role.toUpperCase()} · {site.city.toUpperCase()}
+        </p>
         <h1
           aria-label={site.name}
           className="m-0 font-serif text-[clamp(64px,11vw,168px)] leading-[0.95] font-normal tracking-[-0.02em]"

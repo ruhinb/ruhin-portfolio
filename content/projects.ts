@@ -682,7 +682,7 @@ export const moreProjects: MoreProject[] = [
     title: "Three networks, one image test",
     description: "ResNet-18 vs AlexNet vs a simple CNN on CIFAR-10. The winner: 81% accuracy.",
     context: "DEEP LEARNING · 2024",
-    href: "https://github.com/ruhinb/Deep_learning_Projects",
+    href: "https://github.com/ruhinb/Deep_Learning_Projects",
     categories: ["Machine learning"],
   },
   {
@@ -690,14 +690,14 @@ export const moreProjects: MoreProject[] = [
     description:
       "LSTM and GRU within a few dollars a day, yet no better than a coin flip on direction.",
     context: "DEEP LEARNING · 2024",
-    href: "https://github.com/ruhinb/Deep_learning_Projects",
+    href: "https://github.com/ruhinb/Deep_Learning_Projects",
     categories: ["Machine learning"],
   },
   {
     title: "Can one neuron spot diabetes?",
     description: "768 patients, 71% accuracy, and half the insulin readings were secretly zeros.",
     context: "DEEP LEARNING · 2024",
-    href: "https://github.com/ruhinb/Deep_learning_Projects",
+    href: "https://github.com/ruhinb/Deep_Learning_Projects",
     categories: ["Machine learning"],
   },
 ];

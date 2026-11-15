@@ -2,12 +2,13 @@
 export const about = {
   headline: ["Engineer by training,", "analyst by choice."],
   summary:
-    "Data Analyst with 1+ year of industry experience and a Master of Data Science, skilled in SQL, Power BI, Excel and Python and in translating complex operational datasets into actionable business recommendations. Track record of identifying a reminder change projected to keep *BDT *0.87M *a *year in fees and cutting weekly reporting time by *74%.",
+    "Data Analyst with a Master of Data Science and 1+ year of industry experience in SQL, Power BI, Excel and Python. At Fieldbooster, evaluated an A/B-tested reminder pilot that cut patient no-shows by *23%, and automated data preparation to cut weekly reporting time by *74%.",
   facts: [
     { k: "BASED IN", v: "Adelaide, South Australia" },
     { k: "WORK RIGHTS", v: "Full working rights in Australia" },
     { k: "TOOLS", v: "SQL · Power BI · Python · Excel · R" },
     { k: "LANGUAGES", v: "English · Bengali (native)" },
+    { k: "OPEN TO", v: "Adelaide · Perth" },
   ],
   portrait: { src: "/images/portrait.jpg", alt: "Portrait of Rubaiyat Ruhin" },
 };

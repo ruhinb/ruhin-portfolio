@@ -2,7 +2,7 @@
 export const about = {
   headline: ["Engineer by training,", "analyst by choice."],
   summary:
-    "Data Analyst with a Master of Data Science and 1+ year of industry experience in SQL, Power BI, Excel and Python. At Fieldbooster, evaluated an A/B-tested reminder pilot that cut patient no-shows by *23%, and automated data preparation to cut weekly reporting time by *74%.",
+    "Data Analyst with a Master of Data Science and industry experience in SQL, Power BI, Excel and Python. At Fieldbooster Limited, delivered end-to-end data analysis project, from ETL to Power BI dashboards and an A/B-tested reminder pilot that cut patient no-shows by *23%, while automated reporting cut weekly reporting time by *74%. Open to Data Analyst roles.",
   facts: [
     { k: "BASED IN", v: "Adelaide, South Australia" },
     { k: "WORK RIGHTS", v: "Full working rights in Australia" },

@@ -167,3 +167,28 @@ test("stacked cards shrink as the next one arrives, with the GSAP fallback too",
       .toBeLessThan(0.97);
   }
 });
+
+// A chart that loads after the page is laid out must still get its full height. Wide findings
+// once sat in a wrapping column, where Chrome kept a slot sized for a much narrower chart, so
+// on a Retina laptop the chart spilled over the next finding.
+test.describe("case study charts", () => {
+  test.use({ viewport: { width: 1319, height: 810 }, deviceScaleFactor: 2 });
+  test.beforeEach(async ({ page }) => skipIntros(page));
+
+  test("charts that load late still get their full height", async ({ page }) => {
+    await page.route("**/_next/image**", async (route) => {
+      await new Promise((r) => setTimeout(r, 1500));
+      await route.continue();
+    });
+    await page.goto("/projects/patientcare", { waitUntil: "domcontentloaded" });
+    await page.locator("#findings").scrollIntoViewIfNeeded();
+    const fig = page.locator("#findings figure").first();
+    const img = fig.locator("img");
+    await expect
+      .poll(() => img.evaluate((el: HTMLImageElement) => el.complete), { timeout: 10_000 })
+      .toBe(true);
+    await page.waitForTimeout(300);
+    const [f, i] = await Promise.all([fig.boundingBox(), img.boundingBox()]);
+    expect(Math.abs((f?.height ?? 0) - (i?.height ?? 0))).toBeLessThan(4);
+  });
+});

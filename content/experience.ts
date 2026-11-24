@@ -28,7 +28,7 @@ export const experience: Experience[] = [
     role: "Master of Data Science",
     org: "The University of Adelaide",
     points: [
-      "Capstone project: emotional shifts across 42,961 Beyond Blue forum messages, using transformer models and time-series analysis.",
+      "Capstone project: analysed 42,961 Beyond Blue forum posts in Python, using transformer-based NLP and time-series analysis to measure how emotional tone shifts through user interactions.",
     ],
   },
   {
@@ -38,10 +38,12 @@ export const experience: Experience[] = [
     org: "Fieldbooster Limited · Bangladesh",
     open: true,
     points: [
-      "Identified a reminder change that cut no-shows by 23% among the highest-risk patients, projected to keep BDT 0.87M a year in fees, by evaluating a six-week pilot as an A/B test in SQL and Power BI.",
-      "Cut weekly reporting time by 74% (244 to 62.5 minutes) by automating data preparation in PostgreSQL.",
+      "Gathered client requirements in product meetings and agreed feasible reporting solutions with developers.",
+      "Consolidated multiple operational data sources into a PostgreSQL reporting model, validating the data with automated checks and logging data-quality issues for review.",
+      "Analysed appointment data in SQL to identify the patient groups and booking channels driving no-shows, giving operations a clear basis for where to target interventions.",
+      "Evaluated a six-week reminder pilot as an A/B test, identifying a change that cut no-shows by 23% among the highest-risk patients, projected to keep BDT 0.87M a year in fees.",
       "Built and maintained Power BI dashboards with DAX measures and clinic, specialty and date filters, letting the operations team answer follow-up questions without an analyst.",
-      "Gathered client requirements in product meetings and agreed feasible solutions with developers.",
+      "Cut weekly reporting time by 74% (244 to 62.5 minutes) by automating data preparation in PostgreSQL.",
     ],
   },
   {

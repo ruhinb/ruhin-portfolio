@@ -170,15 +170,18 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
             {p.findings.map((f, i) => {
               const wide = f.layout === "wide";
               return (
+                // Wide findings are a single column and must not wrap: in a wrapping column,
+                // Chrome sizes the chart's slot before stretching it to full width and keeps
+                // that shorter height, so a chart that loads late spills over the next finding.
                 <article
                   key={f.title}
-                  className={`flex flex-wrap gap-x-16 gap-y-10 ${
+                  className={
                     wide
-                      ? "flex-col items-stretch"
-                      : f.layout === "side-reverse"
-                        ? "flex-row-reverse items-center"
-                        : "flex-row items-center"
-                  }`}
+                      ? "flex flex-col gap-10"
+                      : `flex flex-wrap items-center gap-x-16 gap-y-10 ${
+                          f.layout === "side-reverse" ? "flex-row-reverse" : "flex-row"
+                        }`
+                  }
                 >
                   <div
                     className={`rv flex min-w-0 flex-col gap-[18px] ${wide ? "max-w-[760px] flex-none" : "flex-[1_1_340px]"}`}
@@ -189,7 +192,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/projects/[sl
                     </h2>
                     <p className="tc text-mu m-0 text-[16.5px] leading-[1.7]">{f.body}</p>
                   </div>
-                  <figure className={`rv m-0 min-w-0 ${wide ? "flex-none" : "flex-[1.5_1_480px]"}`}>
+                  <figure className={`rv m-0 min-w-0 ${wide ? "w-full" : "flex-[1.5_1_480px]"}`}>
                     <div className="imgin tc border-bd overflow-hidden rounded-[18px] border bg-white">
                       <Image
                         quality={90}
